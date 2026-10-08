@@ -17,10 +17,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install ARM64 Cross-Compiler Toolchain
+      - name: Install ARM64 Libraries and Linker
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu zlib1g-dev
+          sudo apt-get install -y lld clang libc6-dev-arm64-cross
 
       - name: Publish Native AOT
         run: |
@@ -29,7 +29,8 @@ jobs:
             -p:UnsafeBinary=true \
             -p:StripSymbols=false \
             -p:NativeDebugSymbols=false \
-            -p:CppCompilerAndLinker=aarch64-linux-gnu-gcc
+            -p:CppCompilerAndLinker=clang \
+            -p:SysRoot=/usr/aarch64-linux-gnu
 
       - name: Zip Executable
         run: |
