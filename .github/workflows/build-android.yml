@@ -17,19 +17,19 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install Complete ARM64 Cross-Compiler Toolchain
+      - name: Install ARM64 Cross-Compiler
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
-      - name: Publish Native AOT
+      - name: Publish Native AOT for Android 12+
         run: |
           dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish \
             -p:PublishAot=true \
             -p:UnsafeBinary=true \
             -p:StripSymbols=false \
             -p:NativeDebugSymbols=false \
-            -p:CppCompilerAndLinker=aarch64-linux-gnu-gcc
+            -p:CustomLinkerArg="-Wl,-z,max-page-size=65536"
 
       - name: Zip Executable
         run: |
