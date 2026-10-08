@@ -22,6 +22,10 @@
 		<Nullable>enable</Nullable>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<InternalsVisibleTo>BitFab.KW1281Test.Tests</InternalsVisibleTo>
+
+		<!-- Corrección TLS 64KB para Bionic / Android 12+ -->
+		<LinkerFlavor>ld</LinkerFlavor>
+		<NativeLibLdFlags>-Wl,-z,max-page-size=65536</NativeLibLdFlags>
 	</PropertyGroup>
 
 	<ItemGroup>
