@@ -23,9 +23,8 @@
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<InternalsVisibleTo>BitFab.KW1281Test.Tests</InternalsVisibleTo>
 
-		<!-- Fuerza alineamiento de 64KB (65536 bytes) para el segmento TLS en Android 12+ -->
-		<LinkerFlavor>ld</LinkerFlavor>
-		<CustomLinkerArg>-Wl,-z,max-page-size=65536,-z,common-page-size=65536</CustomLinkerArg>
+		<!-- Alineación de páginas de memoria a 64KB para Android 12+ / Bionic -->
+		<LinkerArg>-Wl,-z,max-page-size=65536</LinkerArg>
 	</PropertyGroup>
 
 	<ItemGroup>
