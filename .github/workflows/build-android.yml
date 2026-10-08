@@ -24,7 +24,7 @@ jobs:
 
       - name: Publish Native AOT
         run: |
-          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish -p:PublishAot=true -p:UnsafeBinary=true -p:StripSymbols=false -p:NativeDebugSymbols=false "-p:CustomLinkerArg=-Wl,-z,max-page-size=65536"
+          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish -p:PublishAot=true -p:UnsafeBinary=true -p:StripSymbols=false -p:NativeDebugSymbols=false
 
       - name: Zip Executable
         run: |
