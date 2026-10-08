@@ -17,16 +17,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Configure Multiarch and Install ARM64 Toolchain
+      - name: Install ARM64 Cross-Compiler and Libraries
         run: |
-          sudo dpkg --add-architecture arm64
-          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble main restricted universe multiverse
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted universe multiverse
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
-          EOF'
           sudo apt-get update
-          sudo apt-get install -y clang lld llvm zlib1g-dev:arm64 libc6-dev-arm64-cross
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libz-dev-arm64-cross
 
       - name: Publish Native AOT
         run: |
@@ -35,8 +29,7 @@ jobs:
             -p:UnsafeBinary=true \
             -p:StripSymbols=false \
             -p:NativeDebugSymbols=false \
-            -p:CppCompilerAndLinker=clang \
-            -p:SysRoot=/usr/aarch64-linux-gnu
+            -p:CppCompilerAndLinker=aarch64-linux-gnu-gcc
 
       - name: Zip Executable
         run: |
