@@ -28,15 +28,15 @@ jobs:
         env:
           LDFLAGS: "-Wl,-z,max-page-size=65536"
         run: |
-          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -p:PublishAot=true -p:UnsafeBinary=true -p:StripSymbols=false -p:NativeDebugSymbols=false
+          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish -p:PublishAot=true -p:UnsafeBinary=true -p:StripSymbols=false -p:NativeDebugSymbols=false
 
       - name: Zip Executable
         run: |
-          cd bin/Release/net8.0/linux-arm64/publish
+          cd publish
           zip -r kw1281test-android-arm64.zip kw1281test
 
       - name: Upload to Release Assets
         uses: softprops/action-gh-release@v2
         if: github.event_name == 'release'
         with:
-          files: bin/Release/net8.0/linux-arm64/publish/kw1281test-android-arm64.zip
+          files: publish/kw1281test-android-arm64.zip
