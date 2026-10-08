@@ -28,8 +28,7 @@ jobs:
             -p:PublishAot=true \
             -p:UnsafeBinary=true \
             -p:StripSymbols=false \
-            -p:NativeDebugSymbols=false \
-            -p:CustomLinkerArg="-Wl,-z,max-page-size=65536"
+            -p:NativeDebugSymbols=false
 
       - name: Zip Executable
         run: |
