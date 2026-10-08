@@ -71,7 +71,7 @@ jobs:
 
       - name: Zip Executable
         run: |
-          zip -j publish/kw1281test-android-arm64.zip publish/*
+          zip -j publish/kw1281test-android-arm64.zip publish/kw1281test
 
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
