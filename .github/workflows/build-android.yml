@@ -1,25 +1,33 @@
 name: Build kw1281test for Android ARM64
+
 on:
-workflow_dispatch:
+  workflow_dispatch:
+
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout code
-uses: actions/checkout@v4
-- name: Setup .NET
-uses: actions/setup-dotnet@v4
-with:
-dotnet-version: '8.0.x'
-- name: Install ARM64 Cross-Compiler and Bionic Toolchain
-run: |
-sudo apt-get update
-sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-- name: Publish Native AOT with 64-byte TLS Alignment
-run: |
-dotnet publish -c Release -r linux-arm64 -p:PublishAot=true -p:UnsafeBinary=true -p:LinkerFlags="-Wl,-z,max-page-size=65536 -Wl,-z,common-page-size=65536"
-- name: Upload Binary
-uses: actions/upload-artifact@v4
-with:
-name: kw1281test-android-arm64
-path: //publish/kw1281test
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install ARM64 Cross-Compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+      - name: Publish Native AOT
+        run: |
+          dotnet publish -c Release -r linux-arm64 -p:PublishAot=true -p:UnsafeBinary=true -p:LinkerFlags="-Wl,-z,max-page-size=65536 -Wl,-z,common-page-size=65536"
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: kw1281test-android-arm64
+          path: '**/publish/kw1281test'
+          
+  
