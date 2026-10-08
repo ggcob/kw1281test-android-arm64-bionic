@@ -17,10 +17,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install ARM64 Cross-Compiler
+      - name: Install Tools & Cross-Compiler
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu patchelf
 
       - name: Publish Native AOT
         run: |
@@ -29,6 +29,10 @@ jobs:
             -p:UnsafeBinary=true \
             -p:StripSymbols=false \
             -p:NativeDebugSymbols=false
+
+      - name: Align TLS Segment for Android Bionic (64KB)
+        run: |
+          patchelf --page-size 65536 publish/kw1281test
 
       - name: Zip Executable
         run: |
