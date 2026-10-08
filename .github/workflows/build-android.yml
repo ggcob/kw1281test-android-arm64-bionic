@@ -21,8 +21,10 @@ jobs:
           sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
       - name: Publish Native AOT
+        env:
+          LDFLAGS: "-Wl,-z,max-page-size=65536"
         run: |
-          dotnet publish -c Release -r linux-arm64 -p:PublishAot=true -p:UnsafeBinary=true "-p:LinkerFlags=-Wl,-z,max-page-size=65536"
+          dotnet publish kw1281test/kw1281test.csproj -c Release -r linux-arm64 -p:PublishAot=true -p:UnsafeBinary=true
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
