@@ -17,10 +17,11 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install ARM64 Tools & LLVM Linker
+      - name: Install ARM64 Cross-Compiler and Libraries
         run: |
+          sudo dpkg --add-architecture arm64
           sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu lld
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu lld zlib1g-dev:arm64
 
       - name: Publish Native AOT
         run: |
