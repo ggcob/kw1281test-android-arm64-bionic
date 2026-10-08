@@ -32,11 +32,11 @@ jobs:
 
       - name: Zip Executable
         run: |
-          cd kw1281test/bin/Release/net*.0/linux-arm64/publish/
+          cd bin/Release/net8.0/linux-arm64/publish
           zip -r kw1281test-android-arm64.zip kw1281test
 
       - name: Upload to Release Assets
         uses: softprops/action-gh-release@v2
         if: github.event_name == 'release'
         with:
-          files: kw1281test/bin/Release/net*.0/linux-arm64/publish/kw1281test-android-arm64.zip
+          files: bin/Release/net8.0/linux-arm64/publish/kw1281test-android-arm64.zip
