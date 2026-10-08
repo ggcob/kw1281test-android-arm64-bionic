@@ -32,11 +32,12 @@ jobs:
 
       - name: Zip Executable
         run: |
-          cd publish
-          zip -r kw1281test-android-arm64.zip kw1281test
+          zip -j publish/kw1281test-android-arm64.zip publish/*
 
       - name: Upload to Release Assets
         uses: softprops/action-gh-release@v2
         if: github.event_name == 'release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: publish/kw1281test-android-arm64.zip
