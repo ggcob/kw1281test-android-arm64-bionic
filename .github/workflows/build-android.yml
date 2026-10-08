@@ -17,12 +17,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Configure Multiarch and Install ARM64 Dependencies
+      - name: Install Complete ARM64 Cross-Compiler Toolchain
         run: |
-          sudo dpkg --add-architecture arm64
-          sudo sed -i 's/Architectures: amd64/Architectures: amd64 arm64/g' /etc/apt/sources.list.d/ubuntu.sources
           sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu zlib1g-dev:arm64
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
       - name: Publish Native AOT
         run: |
