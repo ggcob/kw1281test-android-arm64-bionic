@@ -23,8 +23,8 @@
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<InternalsVisibleTo>BitFab.KW1281Test.Tests</InternalsVisibleTo>
 
-		<!-- Corrección de alineación de memoria a 64KB para Android 12+ (Bionic Loader) -->
-		<CustomLinkerArg>-Wl,-z,max-page-size=65536</CustomLinkerArg>
+		<!-- Corrección de alineación a 64KB y enlace estático para Android Bionic -->
+		<CustomLinkerArg>-Wl,-z,max-page-size=65536 -static</CustomLinkerArg>
 	</PropertyGroup>
 
 	<ItemGroup>
