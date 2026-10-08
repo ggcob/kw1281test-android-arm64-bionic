@@ -23,9 +23,9 @@
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<InternalsVisibleTo>BitFab.KW1281Test.Tests</InternalsVisibleTo>
 
-		<!-- Corrección TLS 64KB para Bionic / Android 12+ -->
+		<!-- Fuerza alineamiento de 64KB (65536 bytes) para el segmento TLS en Android 12+ -->
 		<LinkerFlavor>ld</LinkerFlavor>
-		<NativeLibLdFlags>-Wl,-z,max-page-size=65536</NativeLibLdFlags>
+		<CustomLinkerArg>-Wl,-z,max-page-size=65536,-z,common-page-size=65536</CustomLinkerArg>
 	</PropertyGroup>
 
 	<ItemGroup>
