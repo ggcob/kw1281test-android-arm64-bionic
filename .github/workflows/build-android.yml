@@ -23,8 +23,16 @@ jobs:
           sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
       - name: Publish Native AOT
+        env:
+          LDFLAGS: "-Wl,-z,max-page-size=65536 -Wl,-z,common-page-size=65536"
         run: |
-          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish -p:PublishAot=true -p:UnsafeBinary=true -p:StripSymbols=false -p:NativeDebugSymbols=false
+          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish \
+            -p:PublishAot=true \
+            -p:UnsafeBinary=true \
+            -p:StripSymbols=false \
+            -p:NativeDebugSymbols=false \
+            -p:CppCompilerAndLinker=aarch64-linux-gnu-gcc \
+            -p:SysRoot=""
 
       - name: Zip Executable
         run: |
