@@ -2,8 +2,6 @@ name: Build and Release kw1281test for Android ARM64
 
 on:
   workflow_dispatch:
-  release:
-    types: [published]
 
 jobs:
   build:
@@ -25,19 +23,23 @@ jobs:
           sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
       - name: Publish Native AOT
-        env:
-          LDFLAGS: "-Wl,-z,max-page-size=65536"
         run: |
-          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish -p:PublishAot=true -p:UnsafeBinary=true -p:StripSymbols=false -p:NativeDebugSymbols=false
+          dotnet publish kw1281test.csproj -c Release -r linux-arm64 -o ./publish \
+            -p:PublishAot=true \
+            -p:UnsafeBinary=true \
+            -p:StripSymbols=false \
+            -p:NativeDebugSymbols=false \
+            -p:CustomLinkerArg="-Wl,-z,max-page-size=65536"
 
       - name: Zip Executable
         run: |
           zip -j publish/kw1281test-android-arm64.zip publish/*
 
-      - name: Upload to Release Assets
+      - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
-        if: github.event_name == 'release'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_name: v1.0.0-arm64
+          name: kw1281test Android ARM64
           files: publish/kw1281test-android-arm64.zip
