@@ -23,8 +23,9 @@
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<InternalsVisibleTo>BitFab.KW1281Test.Tests</InternalsVisibleTo>
 
-		<!-- Alineación de páginas de memoria a 64KB para Android 12+ / Bionic -->
-		<LinkerArg>-Wl,-z,max-page-size=65536</LinkerArg>
+		<!-- Corrección de alineación TLS para Android 12+ (Bionic linker) -->
+		<LinkerFlavor>lld</LinkerFlavor>
+		<CustomLinkerArg>-Wl,-z,max-page-size=65536</CustomLinkerArg>
 	</PropertyGroup>
 
 	<ItemGroup>
