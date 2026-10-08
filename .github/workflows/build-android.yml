@@ -26,7 +26,7 @@ jobs:
           deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted universe multiverse
           EOF'
           sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu zlib1g-dev:arm64
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu zlib1g-dev:arm64 python3
 
       - name: Publish Native AOT for Android 12+
         run: |
@@ -35,6 +35,39 @@ jobs:
             -p:UnsafeBinary=true \
             -p:StripSymbols=false \
             -p:NativeDebugSymbols=false
+
+      - name: Fix TLS Alignment for Android Bionic
+        run: |
+          python3 -c '
+          with open("publish/kw1281test", "r+b") as f:
+              f.seek(0)
+              ident = f.read(16)
+              if ident[:4] != b"\x7fELF":
+                  raise Exception("Not an ELF file")
+              
+              class_elf = ident[4]
+              if class_elf != 2:
+                  raise Exception("Not a 64-bit ELF")
+              
+              f.seek(32)
+              e_phoff = int.from_bytes(f.read(8), "little")
+              f.seek(54)
+              e_phentsize = int.from_bytes(f.read(2), "little")
+              e_phnum = int.from_bytes(f.read(2), "little")
+              
+              for i in range(e_phnum):
+                  ph_offset = e_phoff + i * e_phentsize
+                  f.seek(ph_offset)
+                  p_type = int.from_bytes(f.read(4), "little")
+                  if p_type == 7: # PT_TLS
+                      f.seek(ph_offset + 48)
+                      current_align = int.from_bytes(f.read(8), "little")
+                      print(f"Found PT_TLS at index {i}, current alignment: {current_align}")
+                      f.seek(ph_offset + 48)
+                      f.write((64).to_bytes(8, "little"))
+                      print("Updated PT_TLS alignment to 64.")
+                      break
+          '
 
       - name: Zip Executable
         run: |
